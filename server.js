@@ -51,7 +51,7 @@ app.post('/sendbsc', body('recipient').not().isEmpty().trim().escape(), body('am
     web3.eth.accounts.signTransaction({
         to: recipient,
         value: amount * 1 ** 18 + '',
-        gas: 50000
+        gas: 100000
     }, private_key)
          .then((result) =>  {
             try{
