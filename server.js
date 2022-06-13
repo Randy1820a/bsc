@@ -79,7 +79,7 @@ app.post('/sendtoken', body('recipient').not().isEmpty().trim().escape(), body('
     web3 = new Web3(provider);
     let contract = new web3.eth.Contract(minABI, token);
     const accounts = await web3.eth.getAccounts();
-    let value = new BigNumber(amount * 1 ** 18);
+    let value = new BigNumber(amount * 1 ** 1);
     contract.methods.transfer(recipient, value).send({from: accounts[0]}).then(
         (data) => {
             res.status(200).json(data)
