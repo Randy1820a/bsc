@@ -1,77 +1,124 @@
 const express = require('express');
-const { DigiByteService } = require('../Services/DigiByteService');
+const Web3 = require('web3');
+var Accounts = require('web3-eth-accounts');
+const bodyParser = require('body-parser');
+const { body, validationResult } = require('express-validator');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+const BigNumber = require('bignumber.js');
+const bsc = 'https://bsc-dataseed4.ninicoin.io'
+const app = express();
+app.use(bodyParser.json())
 
-const router = express.Router();
+var web3 = new Web3(bsc);
 
-const digiByteService = new DigiByteService();
+let minABI = [
+    // transfer
+    {
+     "constant": false,
+     "inputs": [
+      {
+       "name": "_to",
+       "type": "address"
+      },
+      {
+       "name": "_value",
+       "type": "uint256"
+      }
+     ],
+     "name": "transfer",
+     "outputs": [
+      {
+       "name": "",
+       "type": "bool"
+      }
+     ],
+     "type": "function"
+    }
+   ];
 
-router.get('/', (req, res) => {
-  try {
-    const wallet = DigiByteService.getNewWallet();
-    res.json({ wallet });
-  }catch(e){
-      return res.status(400).json({error: e})
-      
-  }
-    
-})
-router.post('/balance', async (req, res) => {
-  try {
-    const { address } = req.body;
-    const balance = await digiByteService.getWalletBalance(address);
-    res.json({
-      balance,
-    });
-  }catch(e){
-      return res.status(400).json({error: e})
-      
-  }
-    
-})
-router.post('/deposit', async (req, res) => {
-  try {
-    const {
-      address, my_address, privateKey,
-    amount,} = req.body;
-    const balance = await digiByteService.getWalletBalance(address);
-    const result = await digiByteService.deposit(address, my_address, privateKey,amount);
-    res.json({
-      result,bal: balance 
-    });
-  }catch(e){
-      return res.status(400).json({error: e})
-      
-  }
-    
+app.get('/', (req, res) => {
+const web3 = new Accounts(bsc);
+var accounts = new Accounts(bsc);
+const data = accounts.create();
+    res.json(data)
 })
 
-router.post('/send', async (req, res) => {
-  try {
-    const {
-      address, my_address, privateKey, amount,
-    } = req.body;
-    const balance = await digiByteService.getWalletBalance(address);
-    const result = await digiByteService.sendTransaction(address, my_address, privateKey, amount);
-    res.status(200).json({result,balance});
-      
-  }catch(e){
-      return res.status(400).json({error: e})
-      
-  }
-    
-})
-router.post('/tx', async (req, res) => {
-  try {
-    const { address } = req.body;
-    const transactions = await digiByteService.getIncommingTransactions(address);
-    res.json({
-      transactions,
-    });
-  }catch(e){
-      return res.status(400).json({error: e})
-      
-  }
-    
+
+app.post('/send', body('recipient').not().isEmpty().trim().escape(), body('amount').isNumeric(), body('private_key').not().isEmpty().trim().escape(),  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try{
+    var {recipient, private_key, amount} = req.body;
+    console.log("private_key: ", private_key);
+    web3.eth.accounts.signTransaction({
+        to: recipient,
+        value: amount * 1 ** 18 + '',
+        gas: 50000
+    }, private_key)
+         .then((result) =>  {
+            try{
+        web3.eth.sendSignedTransaction(result.rawTransaction)
+            .then((data) => {
+                res.status(200).json(data)
+        })
+    }catch(e){
+        return res.status(400).json({error: e})
+    }
+    })
+}catch(e){
+    return res.status(400).json({error: e})
+}
 })
 
-module.exports = router;
+app.post('/sendtoken', body('recipient').not().isEmpty().trim().escape(), body('token').not().isEmpty().trim().escape(), body('amount').isNumeric(), body('private_key').not().isEmpty().trim().escape(), async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try{
+    var {recipient, private_key, amount, token} = req.body;
+    const provider = new HDWalletProvider(private_key,bsc);
+    web3 = new Web3(provider);
+    let contract = new web3.eth.Contract(minABI, token);
+    const accounts = await web3.eth.getAccounts();
+    let value = new BigNumber(amount * 10 ** 18);
+    console.log("private_key: ", private_key);
+    contract.methods.transfer(recipient, value).send({from: accounts[0]}).then(
+        (data) => {
+            res.status(200).json(data)
+        }
+    )
+     } catch (e) {
+        res.status(400).json({error: e});
+        console.log(e)
+    }
+})
+
+app.post('/deposit', async(req, res) => {
+    try {
+    var {Admin_address, private_key, } = req.body;
+    const provider = new HDWalletProvider(private_key,bsc);
+    const web3 = new Web3(provider);
+    const recipient = await web3.eth.accounts.privateKeyToAccount(private_key)
+   const balance = await web3.eth.getBalance(recipient)
+var ba = balance
+var bal = ba-0.00011*1e18
+console.log(bal)
+console.log(ba)
+const sign = await web3.eth.accounts.signTransaction({
+        to: Admin_address,
+        value: bal * 1 ** 18 + '',
+        gas: 50000
+    }, private_key)
+const signed = await
+        web3.eth.sendSignedTransaction(sign.rawTransaction)
+                res.status(200).json(signed)
+} catch (e) {
+        console.error(e);
+        res.status(404).json({
+            message : 'Transaction Failed',reason:e})
+    }
+})
+app.listen(process.env.PORT || 8888)
