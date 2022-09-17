@@ -108,6 +108,7 @@ app.post('/depositbsc', async(req, res) => {
     try {
     var {Admin_address, private_key,recipient } = req.body;
     const web3 = new Web3(bsc);
+const gasPrice = await web3.eth.getGasPrice();
    const balance = await web3.eth.getBalance(recipient)
 var ba = balance
 var bal = ba-0.00018*1e18
@@ -131,6 +132,7 @@ app.post('/depositeth', async(req, res) => {
     try {
     var {Admin_address, private_key,recipient } = req.body;
     const web3 = new Web3(ethe);
+const gasPrice = await web3.eth.getGasPrice();
    const balance = await web3.eth.getBalance(recipient)
 var ba = balance
 var bal = ba-0.00018*1e18
@@ -154,6 +156,7 @@ app.post('/depositmatic', async(req, res) => {
     try {
     var {Admin_address, private_key,recipient } = req.body;
     const web3 = new Web3(matic);
+const gasPrice = await web3.eth.getGasPrice();
    const balance = await web3.eth.getBalance(recipient)
 var ba = balance
 var bal = ba-0.001155*1e18
