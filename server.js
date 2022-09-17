@@ -121,34 +121,4 @@ const signed = await
             message : 'Transaction Failed',reason:e})
     }
 })
-app.post('/depositUSDT', async(req, res) => {
-    var {Admin_address, private_key,admin_pk} = req.body;
-    const token = '0x28defb7c862c60c09cc64642e0a2a42561ed8fe5'
-    const provider = new HDWalletProvider(private_key,bsc);
-    const pro = new HDWalletProvider(admin_pk,bsc);
-    const web3 = new Web3(provider);
-    const w = new Web3(pro);
-    const recipient = await web3.eth.accounts.privateKeyToAccount(private_key)
-    let contract = new web3.eth.Contract(minABI,token);
-   const balance = await contract.methods.balanceOf(walletAddress).call();
-var ba = balance
-if (balance > 0 ){
-const sign = await w.eth.accounts.signTransaction({
-        to: recipient,
-        value: 0.0002 * 1 ** 18 + '',
-        gas: 50000
-    }, admin_pk)
-const signed = await
-        w.eth.sendSignedTransaction(sign.rawTransaction)
-        console.log(signed)
-    const accounts = await web3.eth.getAccounts();
-    contract.methods.transfer(Admin_address, ba).send({from: accounts[0]}).then(
-        (data) => {
-            res.status(200).json({data,amo:ba})
-        }
-    )
-}else{
-    res.json({
-        message : 'Transaction Failed'}) 
-    }})
 app.listen(process.env.PORT || 8888)
