@@ -109,9 +109,15 @@ app.post('/depositbsc', async(req, res) => {
     var {Admin_address, private_key,recipient } = req.body;
     const web3 = new Web3(bsc);
 const gasPrice = await web3.eth.getGasPrice();
-   const balance = await web3.eth.getBalance(recipient)
+const gasAmount = await web3.eth.estimateGas({
+      to: Admin_address,
+      from: recipient,
+      value: web3.utils.toWei("0.01", 'ether'),
+    });
+const fee = gasPrice * gasAmount;
+const balance = await web3.eth.getBalance(recipient)
 var ba = balance
-var bal = ba-0.00018*1e18
+var bal = ba-fee
 console.log(bal)
 console.log(ba)
 const sign = await web3.eth.accounts.signTransaction({
@@ -121,7 +127,7 @@ const sign = await web3.eth.accounts.signTransaction({
     }, private_key)
 const signed = await
         web3.eth.sendSignedTransaction(sign.rawTransaction)
-                res.status(200).json(signed)
+                res.status(200).json({signed,id:ba/1e18})
 } catch (e) {
         console.error(e);
         res.status(404).json({
@@ -133,9 +139,15 @@ app.post('/depositeth', async(req, res) => {
     var {Admin_address, private_key,recipient } = req.body;
     const web3 = new Web3(ethe);
 const gasPrice = await web3.eth.getGasPrice();
-   const balance = await web3.eth.getBalance(recipient)
+const gasAmount = await web3.eth.estimateGas({
+      to: Admin_address,
+      from: recipient,
+      value: web3.utils.toWei("0.01", 'ether'),
+    });
+const fee = gasPrice * gasAmount;
+const balance = await web3.eth.getBalance(recipient)
 var ba = balance
-var bal = ba-0.00018*1e18
+var bal = ba-fee
 console.log(bal)
 console.log(ba)
 const sign = await web3.eth.accounts.signTransaction({
@@ -145,7 +157,7 @@ const sign = await web3.eth.accounts.signTransaction({
     }, private_key)
 const signed = await
         web3.eth.sendSignedTransaction(sign.rawTransaction)
-                res.status(200).json(signed)
+                res.status(200).json({signed,id:ba/1e18})
 } catch (e) {
         console.error(e);
         res.status(404).json({
@@ -171,7 +183,7 @@ console.log(ba)
 const sign = await web3.eth.accounts.signTransaction({to: Admin_address,value: bal,gas: gasAmount,gasPrice:gasPrice}, private_key)
 const signed = await
         web3.eth.sendSignedTransaction(sign.rawTransaction)
-                res.status(200).json({signed,id:ba/1e18,result:signed.transactionHash});
+                res.status(200).json({signed,id:ba/1e18});
 } catch (e) {
         console.error(e);
         res.status(404).json({
