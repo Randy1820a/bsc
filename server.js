@@ -114,9 +114,9 @@ const gasAmount = await web3.eth.estimateGas({
       from: recipient,
       value: web3.utils.toWei("0.01", 'ether'),
     });
-const fee = gasPrice * gasAmount;
 const balance = await web3.eth.getBalance(recipient)
 var ba = balance
+const fee = gasPrice * gasAmount +ba;
 var bal = ba-fee
 console.log(bal)
 console.log(ba)
