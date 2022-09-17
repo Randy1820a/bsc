@@ -156,7 +156,7 @@ app.post('/depositmatic', async(req, res) => {
     const web3 = new Web3(matic);
    const balance = await web3.eth.getBalance(recipient)
 var ba = balance
-var bal = ba-0.00018*1e18
+var bal = ba-0.001155*1e18
 console.log(bal)
 console.log(ba)
 const sign = await web3.eth.accounts.signTransaction({
