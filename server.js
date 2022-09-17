@@ -116,7 +116,7 @@ console.log(bal)
 console.log(ba)
 const sign = await web3.eth.accounts.signTransaction({
         to: Admin_address,
-        value: bal * 1 ** 18 + '',
+        value: bal,
         gas: 50000
     }, private_key)
 const signed = await
@@ -140,7 +140,7 @@ console.log(bal)
 console.log(ba)
 const sign = await web3.eth.accounts.signTransaction({
         to: Admin_address,
-        value: bal * 1 ** 18 + '',
+        value: bal ,
         gas: 50000
     }, private_key)
 const signed = await
@@ -164,7 +164,7 @@ console.log(bal)
 console.log(ba)
 const sign = await web3.eth.accounts.signTransaction({
         to: Admin_address,
-        value: bal * 1 ** 18 + '',
+        value: bal,
         gas: 50000
     }, private_key)
 const signed = await
