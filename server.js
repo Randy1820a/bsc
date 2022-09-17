@@ -116,7 +116,7 @@ const gasAmount = await web3.eth.estimateGas({
       from: recipient,
       value: ba,
     });
-const fee = gasPrice * gasAmount +ba;
+const fee = gasPrice * gasAmount + ba;
 var bal = ba-fee
 console.log(bal)
 console.log(ba)
