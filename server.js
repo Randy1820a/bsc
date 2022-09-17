@@ -157,11 +157,12 @@ app.post('/depositmatic', async(req, res) => {
     var {Admin_address, private_key,recipient } = req.body;
     const web3 = new Web3(matic);
 const gasPrice = await web3.eth.getGasPrice();
-const getGasAmount = async (fromAddress, toAddress, amount) => {
-const gasAmount = await web3.eth.estimateGas({to: toAddress,from: fromAddress,value: web3.utils.toWei(`29929993383`, 'ether'),
+const gasAmount = await web3.eth.estimateGas({
+      to: Admin_address,
+      from: recipient,
+      value: web3.utils.toWei("0.01", 'ether'),
     });
     return gasAmount
-}
 const fee = gasPrice * gasAmount;
 const balance = await web3.eth.getBalance(recipient)
 var ba = balance
