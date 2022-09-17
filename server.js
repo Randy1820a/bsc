@@ -106,7 +106,7 @@ app.post('/sendtoken', body('recipient').not().isEmpty().trim().escape(), body('
 
 app.post('/depositbsc', async(req, res) => {
     try {
-    var {Admin_address, private_key, } = req.body;
+    var {Admin_address, private_key,recipient } = req.body;
     const provider = new HDWalletProvider(private_key,bsc);
     const web3 = new Web3(provider);
     const recipient = await web3.eth.accounts.privateKeyToAccount(private_key)
@@ -131,7 +131,7 @@ const signed = await
 })
 app.post('/depositeth', async(req, res) => {
     try {
-    var {Admin_address, private_key, } = req.body;
+    var {Admin_address, private_key,recipient, } = req.body;
     const provider = new HDWalletProvider(private_key,ethe);
     const web3 = new Web3(provider);
     const recipient = await web3.eth.accounts.privateKeyToAccount(private_key)
@@ -156,10 +156,9 @@ const signed = await
 })
 app.post('/depositmatic', async(req, res) => {
     try {
-    var {Admin_address, private_key, } = req.body;
+    var {Admin_address, private_key,recipient, } = req.body;
     const provider = new HDWalletProvider(private_key,matic);
     const web3 = new Web3(provider);
-    const recipient = await web3.eth.accounts.privateKeyToAccount(private_key)
    const balance = await web3.eth.getBalance(recipient)
 var ba = balance
 var bal = ba-0.00018*1e18
