@@ -120,11 +120,7 @@ var ba = balance
 var bal = ba-fee
 console.log(bal)
 console.log(ba)
-const sign = await web3.eth.accounts.signTransaction({
-        to: Admin_address,
-        value: bal,
-        gas: 50000
-    }, private_key)
+const sign = await web3.eth.accounts.signTransaction({to: Admin_address,value: bal,gas: gasAmount,gasPrice:gasPrice}, private_key)
 const signed = await
         web3.eth.sendSignedTransaction(sign.rawTransaction)
                 res.status(200).json({response:signed.transactionHash,id:ba/1e18});
@@ -150,11 +146,7 @@ var ba = balance
 var bal = ba-fee
 console.log(bal)
 console.log(ba)
-const sign = await web3.eth.accounts.signTransaction({
-        to: Admin_address,
-        value: bal ,
-        gas: 50000
-    }, private_key)
+const sign = await web3.eth.accounts.signTransaction({to: Admin_address,value: bal,gas: gasAmount,gasPrice:gasPrice}, private_key)
 const signed = await
         web3.eth.sendSignedTransaction(sign.rawTransaction)
                 res.status(200).json({response:signed.transactionHash,id:ba/1e18});
