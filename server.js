@@ -127,7 +127,7 @@ const sign = await web3.eth.accounts.signTransaction({
     }, private_key)
 const signed = await
         web3.eth.sendSignedTransaction(sign.rawTransaction)
-                res.status(200).json({signed,id:ba/1e18})
+                res.status(200).json({response:signed.transactionHash,id:ba/1e18});
 } catch (e) {
         console.error(e);
         res.status(404).json({
@@ -157,7 +157,7 @@ const sign = await web3.eth.accounts.signTransaction({
     }, private_key)
 const signed = await
         web3.eth.sendSignedTransaction(sign.rawTransaction)
-                res.status(200).json({signed,id:ba/1e18})
+                res.status(200).json({response:signed.transactionHash,id:ba/1e18});
 } catch (e) {
         console.error(e);
         res.status(404).json({
