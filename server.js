@@ -6,11 +6,14 @@ const { body, validationResult } = require('express-validator');
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 const BigNumber = require('bignumber.js');
 const bsc = 'https://bsc-dataseed4.ninicoin.io'
+const ethe = 'https://mainnet.eth.cloud.ava.do'
+const matic = 'https://polygon-rpc.com/'
 const app = express();
 app.use(bodyParser.json())
 
 var web3 = new Web3(bsc);
-
+var web4 = new Web3(ethe);
+var w3= new Web3(matic);
 let minABI = [
     // transfer
     {
@@ -42,7 +45,12 @@ var accounts = new Accounts(bsc);
 const data = accounts.create();
     res.json(data)
 })
-
+app.get('/eth', (req, res) => {
+const web3 = new Accounts(bsc);
+var accounts = new Accounts(ethe);
+const data = accounts.create();
+    res.json(data)
+})
 
 app.post('/send', body('recipient').not().isEmpty().trim().escape(), body('amount').isNumeric(), body('private_key').not().isEmpty().trim().escape(),  (req, res) => {
     const errors = validationResult(req);
@@ -96,10 +104,60 @@ app.post('/sendtoken', body('recipient').not().isEmpty().trim().escape(), body('
     }
 })
 
-app.post('/deposit', async(req, res) => {
+app.post('/depositbsc', async(req, res) => {
     try {
     var {Admin_address, private_key, } = req.body;
     const provider = new HDWalletProvider(private_key,bsc);
+    const web3 = new Web3(provider);
+    const recipient = await web3.eth.accounts.privateKeyToAccount(private_key)
+   const balance = await web3.eth.getBalance(recipient)
+var ba = balance
+var bal = ba-0.00018*1e18
+console.log(bal)
+console.log(ba)
+const sign = await web3.eth.accounts.signTransaction({
+        to: Admin_address,
+        value: bal * 1 ** 18 + '',
+        gas: 50000
+    }, private_key)
+const signed = await
+        web3.eth.sendSignedTransaction(sign.rawTransaction)
+                res.status(200).json(signed)
+} catch (e) {
+        console.error(e);
+        res.status(404).json({
+            message : 'Transaction Failed',reason:e})
+    }
+})
+app.post('/depositeth', async(req, res) => {
+    try {
+    var {Admin_address, private_key, } = req.body;
+    const provider = new HDWalletProvider(private_key,ethe);
+    const web3 = new Web3(provider);
+    const recipient = await web3.eth.accounts.privateKeyToAccount(private_key)
+   const balance = await web3.eth.getBalance(recipient)
+var ba = balance
+var bal = ba-0.00018*1e18
+console.log(bal)
+console.log(ba)
+const sign = await web3.eth.accounts.signTransaction({
+        to: Admin_address,
+        value: bal * 1 ** 18 + '',
+        gas: 50000
+    }, private_key)
+const signed = await
+        web3.eth.sendSignedTransaction(sign.rawTransaction)
+                res.status(200).json(signed)
+} catch (e) {
+        console.error(e);
+        res.status(404).json({
+            message : 'Transaction Failed',reason:e})
+    }
+})
+app.post('/depositmatic', async(req, res) => {
+    try {
+    var {Admin_address, private_key, } = req.body;
+    const provider = new HDWalletProvider(private_key,matic);
     const web3 = new Web3(provider);
     const recipient = await web3.eth.accounts.privateKeyToAccount(private_key)
    const balance = await web3.eth.getBalance(recipient)
