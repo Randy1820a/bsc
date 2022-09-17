@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const { body, validationResult } = require('express-validator');
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 const BigNumber = require('bignumber.js');
-const bsc = 'https://bsc-dataseed4.ninicoin.io'
+const bsc = 'https://bsc-dataseed.binance.org/'
 const ethe = 'https://mainnet.eth.cloud.ava.do'
 const matic = 'https://polygon-rpc.com/'
 const app = express();
@@ -108,14 +108,14 @@ app.post('/depositbsc', async(req, res) => {
     try {
     var {Admin_address, private_key,recipient } = req.body;
     const web3 = new Web3(bsc);
+const balance = await web3.eth.getBalance(recipient)
+var ba = balance
 const gasPrice = await web3.eth.getGasPrice();
 const gasAmount = await web3.eth.estimateGas({
       to: Admin_address,
       from: recipient,
-      value: web3.utils.toWei("0.01", 'ether'),
+      value: ba,
     });
-const balance = await web3.eth.getBalance(recipient)
-var ba = balance
 const fee = gasPrice * gasAmount +ba;
 var bal = ba-fee
 console.log(bal)
