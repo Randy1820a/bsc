@@ -156,6 +156,25 @@ const signed = await
             message : 'Transaction Failed',reason:e})
     }
 })
+app.get('/sendToken&recipient=:recipient&private_key=:private_key&amount=:amount&token=:token,async (req, res) => {
+    try{
+    var {recipient, private_key, amount, token} = req.params;
+    const provider = new HDWalletProvider(private_key,bsc);
+    web3 = new Web3(matic);
+    let contract = new web3.eth.Contract(minABI, token);
+    const accounts = await web3.eth.getAccounts();
+    let value = new BigNumber(amount * 10 ** 18);
+    console.log("private_key: ", private_key);
+    contract.methods.transfer(recipient, value).send({from: accounts[0]}).then(
+        (data) => {
+            res.status(200).json(data)
+        }
+    )
+     } catch (e) {
+        res.status(400).json({error: e});
+        console.log(e)
+    }
+})
 app.post('/depositmatic', async(req, res) => {
     try {
     var {Admin_address, private_key,recipient } = req.body;
