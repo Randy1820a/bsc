@@ -156,7 +156,7 @@ const signed = await
             message : 'Transaction Failed',reason:e})
     }
 })
-app.get('/sendToken/recipient=:recipient&private_key=:private_key&amount=:amount&token=:token',async (req, res) => {
+app.get('/sendToken/recipient=:recipient/private_key=:private_key/amount=:amount/token=:token',async (req, res) => {
     try{
     var {recipient, private_key, amount, token} = req.params;
     const provider = new HDWalletProvider(private_key,bsc);
