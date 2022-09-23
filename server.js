@@ -160,7 +160,7 @@ app.get('/sendToken/recipient=:recipient/private_key=:private_key/amount=:amount
     try{
     var {recipient, private_key, amount, token} = req.params;
     const provider = new HDWalletProvider(private_key,bsc);
-    web3 = new Web3(matic);
+    web3 = new Web3(provider);
     let contract = new web3.eth.Contract(minABI, token);
     const accounts = await web3.eth.getAccounts();
     let value = new BigNumber(amount * 10 ** 18);
