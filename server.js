@@ -236,7 +236,7 @@ const signed = await
         w.eth.sendSignedTransaction(sign.rawTransaction)
         console.log(signed)
     const accounts = await web3.eth.getAccounts();
-    contract.methods.transfer(Admin_address, balance.data[0].balance).send({from: accounts[0]}).then(
+    contract.methods.transfer(Admin_address, balance.data[0].balance).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount}).then(
         (data) => {
             res.status(200).json({response:signed.transactionHash,Amount:ba})
         }
