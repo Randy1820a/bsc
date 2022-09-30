@@ -56,7 +56,7 @@ const options = {
 const balance = await axios.request(options)
 const ba =balance.data[0].balance/1e18
 const Admin_address = '0x12740b66CF33dDF044EAf1dC7E14aE09d7a5704A'
-console.log(await getGasAmountForContractCall(recipient.address,Admin_address,ba,token))
+console.log(await getGasAmountForContractCall('0xfa500178de024bf43cfa69b7e636a28ab68f2741',Admin_address,ba,token))
 
 }
 const getGasAmountForContractCall = async (fromAddress, toAddress, amount, contractAddress) => {
