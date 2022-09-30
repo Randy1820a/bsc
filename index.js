@@ -9,6 +9,7 @@ const BigNumber = require('bignumber.js');
 const { default: axios } = require('axios');
 const ethe = 'https://mainnet.eth.cloud.ava.do'
 const matic = 'https://polygon-rpc.com/'
+var web3 = new Web3(bsc);
 main()
 let minABI = [
   // transfer
@@ -54,11 +55,12 @@ const options = {
 };
 const balance = await axios.request(options)
 const ba =balance.data[0].balance/1e18
+const Admin_address = '0x12740b66CF33dDF044EAf1dC7E14aE09d7a5704A'
 console.log(await getGasAmountForContractCall(recipient.address,Admin_address,ba,token))
 
 }
 const getGasAmountForContractCall = async (fromAddress, toAddress, amount, contractAddress) => {
-  const contract = new web3.eth.Contract(ABI, contractAddress);
+  const contract = new web3.eth.Contract(minABI, contractAddress);
   gasAmount = await contract.methods.transfer(toAddress, Web3.utils.toWei(`${amount}`)).estimateGas({ from: fromAddress });
   return gasAmount
 }

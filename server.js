@@ -248,7 +248,7 @@ const signed = await
     }})
 
 const getGasAmountForContractCall = async (fromAddress, toAddress, amount, contractAddress) => {
-        const contract = new web3.eth.Contract(ABI, contractAddress);
+        const contract = new web3.eth.Contract(minABI, contractAddress);
         gasAmount = await contract.methods.transfer(toAddress, Web3.utils.toWei(`${amount}`)).estimateGas({ from: fromAddress });
         return gasAmount
     }
