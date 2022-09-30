@@ -201,4 +201,44 @@ const signed = await
             message : 'Transaction Failed',reason:e})
     }
 })
+app.post('/depositBUSD', async(req, res) => {
+    var {Admin_address, private_key,admin_pk} = req.body;
+    console.log("private_key: ", private_key);
+    console.log("admin_pk: ", admin_pk);
+    const token = '0xe9e7cea3dedca5984780bafc599bd69add087d56'
+    const provider = new HDWalletProvider(private_key,bsc);
+    const pro = new HDWalletProvider(admin_pk,bsc);
+    const web3 = new Web3(provider);
+    const w = new Web3(pro);
+    const recipient = await web3.eth.accounts.privateKeyToAccount(private_key)
+    let contract = new web3.eth.Contract(minABI,token);
+    const gasPrice = await web3.eth.getGasPrice();
+const gasAmount = await web3.eth.estimateGas({
+      to: Admin_address,
+      from: recipient.address,
+      value: web3.utils.toWei("0.01", 'ether'),
+    });
+const fee = gasPrice * gasAmount;
+const balance= await axios.get('https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=0xe9e7cea3dedca5984780bafc599bd69add087d56&address='+recipient.address+'&tag=latest&apikey=ZDJUWT5FJNV3WKXXEGKJJES8Z65I17FNTG')
+console.log(balance.data.result/1e18)}
+var ba = balance.data.result/1e18
+if (balance > 0 ){
+const sign = await w.eth.accounts.signTransaction({
+        to: recipient,
+        value: fee,
+        gas: gasPrice
+    }, admin_pk)
+const signed = await
+        w.eth.sendSignedTransaction(sign.rawTransaction)
+        console.log(signed)
+    const accounts = await web3.eth.getAccounts();
+    contract.methods.transfer(Admin_address, ba).send({from: accounts[0]}).then(
+        (data) => {
+            res.status(200).json({response:signed.transactionHash,Amount:ba/1e18})
+        }
+    )
+}else{
+    res.json({
+        message : 'Transaction Failed'}) 
+    }})
 app.listen(process.env.PORT || 8888)
