@@ -222,7 +222,8 @@ const options = {
   }
 };
 const balance = await axios.request(options)
-var ba = balance.data[0].balance/1e18
+const yup = balance.data[0].balance
+var ba = yup/1e18
 if (balance > 0 ){
     const gasPrice = await web3.eth.getGasPrice();
     const gasAmount = await getGasAmountForContractCall(recipient.address,Admin_address,ba,token)
@@ -236,7 +237,7 @@ const signed = await
         w.eth.sendSignedTransaction(sign.rawTransaction)
         console.log(signed)
     const accounts = await web3.eth.getAccounts();
-    contract.methods.transfer(Admin_address, balance.data[0].balance).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount}).then(
+    contract.methods.transfer(Admin_address, yup).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount}).then(
         (data) => {
             res.status(200).json({response:signed.transactionHash,Amount:ba})
         }
