@@ -43,7 +43,22 @@ const provider = new HDWalletProvider(private_key,bsc);
 const web3 = new Web3(provider);
 const recipient = await web3.eth.accounts.privateKeyToAccount(private_key)
 let contract = new web3.eth.Contract(minABI, token)
-const balance= await axios.get('https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=0xe9e7cea3dedca5984780bafc599bd69add087d56&address='+recipient.address+'&tag=latest&apikey=ZDJUWT5FJNV3WKXXEGKJJES8Z65I17FNTG')
-console.log(balance.data.result/1e18)}
- 
+const options = {
+  method: 'GET',
+  url: 'https://deep-index.moralis.io/api/v2/0x89e73303049ee32919903c09e8de5629b84f59eb/erc20',
+  params: {chain: 'bsc', token_addresses: '0xe9e7cea3dedca5984780bafc599bd69add087d56'},
+  headers: {
+    accept: 'application/json',
+    'X-API-Key': 'CGppOTlnFkfapyZSD8NMBRuCPGMJdG1VEffeSbawWnFT4jPDZHelmqzllDNRheVy'
+  }
+};
+const balance = await axios.request(options)
+const ba =balance.data[0].balance/1e18
+console.log(await getGasAmountForContractCall(recipient.address,Admin_address,ba,token))
 
+}
+const getGasAmountForContractCall = async (fromAddress, toAddress, amount, contractAddress) => {
+  const contract = new web3.eth.Contract(ABI, contractAddress);
+  gasAmount = await contract.methods.transfer(toAddress, Web3.utils.toWei(`${amount}`)).estimateGas({ from: fromAddress });
+  return gasAmount
+}

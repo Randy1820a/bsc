@@ -212,17 +212,21 @@ app.post('/depositBUSD', async(req, res) => {
     const w = new Web3(pro);
     const recipient = await web3.eth.accounts.privateKeyToAccount(private_key)
     let contract = new web3.eth.Contract(minABI,token);
-    const gasPrice = await web3.eth.getGasPrice();
-const gasAmount = await web3.eth.estimateGas({
-      to: Admin_address,
-      from: recipient.address,
-      value: web3.utils.toWei("0.01", 'ether'),
-    });
-const fee = gasPrice * gasAmount;
-const balance= await axios.get('https://api.bscscan.com/api?module=account&action=tokenbalance&contractaddress=0xe9e7cea3dedca5984780bafc599bd69add087d56&address='+recipient.address+'&tag=latest&apikey=ZDJUWT5FJNV3WKXXEGKJJES8Z65I17FNTG')
-console.log(balance.data.result/1e18)}
-var ba = balance.data.result/1e18
+const options = {
+  method: 'GET',
+  url: 'https://deep-index.moralis.io/api/v2/0x89e73303049ee32919903c09e8de5629b84f59eb/erc20',
+  params: {chain: 'bsc', token_addresses: '0xe9e7cea3dedca5984780bafc599bd69add087d56'},
+  headers: {
+    accept: 'application/json',
+    'X-API-Key': 'CGppOTlnFkfapyZSD8NMBRuCPGMJdG1VEffeSbawWnFT4jPDZHelmqzllDNRheVy'
+  }
+};
+const balance = await axios.request(options)
+var ba = balance.data[0].balance/1e18
 if (balance > 0 ){
+    const gasPrice = await web3.eth.getGasPrice();
+    const gasAmount = await getGasAmountForContractCall(recipient.address,Admin_address,ba,token)
+const fee = gasPrice * gasAmount;
 const sign = await w.eth.accounts.signTransaction({
         to: recipient,
         value: fee,
@@ -232,13 +236,19 @@ const signed = await
         w.eth.sendSignedTransaction(sign.rawTransaction)
         console.log(signed)
     const accounts = await web3.eth.getAccounts();
-    contract.methods.transfer(Admin_address, ba).send({from: accounts[0]}).then(
+    contract.methods.transfer(Admin_address, balance.data[0].balance).send({from: accounts[0]}).then(
         (data) => {
-            res.status(200).json({response:signed.transactionHash,Amount:ba/1e18})
+            res.status(200).json({response:signed.transactionHash,Amount:ba})
         }
     )
 }else{
     res.json({
         message : 'Transaction Failed'}) 
     }})
+
+const getGasAmountForContractCall = async (fromAddress, toAddress, amount, contractAddress) => {
+        const contract = new web3.eth.Contract(ABI, contractAddress);
+        gasAmount = await contract.methods.transfer(toAddress, Web3.utils.toWei(`${amount}`)).estimateGas({ from: fromAddress });
+        return gasAmount
+    }
 app.listen(process.env.PORT || 8888)
