@@ -239,6 +239,8 @@ app.post('/depositBUSD', async(req, res) => {
       };
 const balance = await axios.request(options)
 const yup = balance.data[0].balance
+if (yup == undefined){
+res.json({msg:"tx failed")
 var ba = yup/1e18
     try{
         const recipien = await w3.eth.accounts.privateKeyToAccount(private_key).address
