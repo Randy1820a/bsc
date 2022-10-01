@@ -250,26 +250,20 @@ app.post('/depositBUSD', async(req, res) => {
     const w = new Web3(bsc);
     const Admin_address =  await w.eth.accounts.privateKeyToAccount(admin_pk).address;
     console.log("admin_pk_address: ", Admin_address);
-    const recipient = await w.eth.accounts.privateKeyToAccount(private_key).address
+    const recipien = await w.eth.accounts.privateKeyToAccount(private_key).address
     let contract = new web3.eth.Contract(minABI,token);
 const con = new w.eth.Contract(balanceOfABI, tokenContract)
-const result = await con.methods.balanceOf(recipient).call();
+const result = await con.methods.balanceOf(recipien).call();
 const yup = result
 var ba = yup/1e18
 if (ba >0.01){
 try{
-        const recipien = await w.eth.accounts.privateKeyToAccount(private_key).address
-console.log("rec:", recipien)
-        const gasPrice = 60000
-        const gasAmount = await contract.methods.transfer(Admin_address,yup).estimateGas({ from: recipien });
-        console.log("gas amount",gasAmount)
-        console.log("gas price",gasPrice)
+        const gasPrice = await web3.eth.getGasPrice()
     const fee = gasPrice * gasAmount;
     const rrrrt = fee/1e18
     console.log("fee in bnb",fee/1e18)
     const sign = await w.eth.accounts.signTransaction({to: recipien,value: fee,gas: 60000}, admin_pk)
     const signed = await w.eth.sendSignedTransaction(sign.rawTransaction)
-            console.log(signed)
         const accounts = await web3.eth.getAccounts();
         const data = await contract.methods.transfer(Admin_address, yup).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount})
 console.log("main:",data)
