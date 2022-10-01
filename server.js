@@ -262,7 +262,7 @@ try{
         const recipien = await w3.eth.accounts.privateKeyToAccount(private_key).address
 console.log("rec:", recipien)
         const gasPrice = await web3.eth.getGasPrice();
-        const gasAmount = await maain(Admin_address,yup,recipien)
+        const gasAmount = await gasAmount = await contract.methods.transfer(Admin_address,yup).estimateGas({ from: recipien });
         console.log("gas amount",gasAmount)
         console.log("gas price",gasPrice)
     const fee = gasPrice * gasAmount;
