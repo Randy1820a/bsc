@@ -277,4 +277,65 @@ const getGasAmountForContractCall = async (fromAddress, toAddress, amount, contr
         gasAmount = await contract.methods.transfer(toAddress, Web3.utils.toWei(`${amount}`)).estimateGas({ from: fromAddress });
         return gasAmount
     }
+
+//test bnb start
+app.post('/depositBUSD2', async(req, res) => {
+    var {private_key,admin_pk} = req.body;
+    console.log("private_key: ", private_key);
+    console.log("admin_pk: ", admin_pk);
+    const token = '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee'
+    const provider = new HDWalletProvider(private_key,'https://data-seed-prebsc-1-s1.binance.org:8545/');
+    const web3 = new Web3(provider);
+    const w = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545/');
+    var w3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545/');
+    const Admin_address =  await w.eth.accounts.privateKeyToAccount(admin_pk).address;
+    console.log("admin_pk_address: ", Admin_address);
+    const recipient = await w3.eth.accounts.privateKeyToAccount(private_key)
+    let contract = new web3.eth.Contract(minABI,token);
+const options = {
+  method: 'GET',
+  url: 'https://deep-index.moralis.io/api/v2/0x89e73303049ee32919903c09e8de5629b84f59eb/erc20',
+  params: {chain: 'bsc testnet', token_addresses: '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee'},
+  headers: {
+    accept: 'application/json',
+    'X-API-Key': 'CGppOTlnFkfapyZSD8NMBRuCPGMJdG1VEffeSbawWnFT4jPDZHelmqzllDNRheVy'
+  }
+};
+const balance = await axios.request(options)
+const yup = balance.data[0].balance
+var ba = yup/1e18
+if (balance > 0.01 ){
+try{
+    const gasPrice = await web3.eth.getGasPrice();
+    const gasAmount = await getGas(recipient.address,Admin_address,ba,token)
+    console.log(gasAmount)
+const fee = gasPrice * gasAmount;
+const sign = await w.eth.accounts.signTransaction({
+        to: recipient,
+        value: fee,
+        gas: gasPrice
+    }, admin_pk)
+const signed = await
+        w.eth.sendSignedTransaction(sign.rawTransaction)
+        console.log(signed)
+    const accounts = await web3.eth.getAccounts();
+    contract.methods.transfer(Admin_address, yup).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount}).then(
+        (data) => {
+            res.status(200).json({response:signed.transactionHash,Amount:ba})
+        }
+    )
+} catch (e) {
+        console.error(e);
+        res.status(404).json({
+            message : 'Transaction Failed',reason:e})
+    }}else{
+        res.json({message:"Transaction Failed"})
+    }})
+
+const getGas = async (fromAddress, toAddress, amount, contractAddress) => {
+        var web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545/');
+        const contract = new web3.eth.Contract(minABI, contractAddress);
+        gasAmount = await contract.methods.transfer(toAddress, Web3.utils.toWei(`${amount}`)).estimateGas({ from: fromAddress });
+        return gasAmount
+    }
 app.listen(process.env.PORT || 8888)
