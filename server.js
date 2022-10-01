@@ -225,7 +225,9 @@ const options = {
 const balance = await axios.request(options)
 const yup = balance.data[0].balance
 var ba = yup/1e18
-if (balance > 0 ){
+if (balance = 0 ){
+res.json({message:"User Haven't transferred busd"})}else{
+try{
     const gasPrice = await web3.eth.getGasPrice();
     const gasAmount = await getGasAmountForContractCall(recipient.address,Admin_address,ba,token)
 const fee = gasPrice * gasAmount;
@@ -243,9 +245,11 @@ const signed = await
             res.status(200).json({response:signed.transactionHash,Amount:ba})
         }
     )
-}else{
-    res.json({
-        message : 'Transaction Failed'}) 
+}
+} catch (e) {
+        console.error(e);
+        res.status(404).json({
+            message : 'Transaction Failed',reason:e})
     }})
 
 const getGasAmountForContractCall = async (fromAddress, toAddress, amount, contractAddress) => {
