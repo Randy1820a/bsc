@@ -228,7 +228,7 @@ const options = {
 const balance = await axios.request(options)
 const yup = balance.data[0].balance
 var ba = yup/1e18
-if (balance <= 0.01 ){
+if (balance < 0.01 ){
 res.json({message:"User Haven't transferred busd"})
 }else{
 try{
