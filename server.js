@@ -1,5 +1,6 @@
 const express = require('express');
 const Web3 = require('web3');
+const stripHexPrefix = require('strip-hex-prefix');
 var Accounts = require('web3-eth-accounts');
 const bodyParser = require('body-parser');
 const { body, validationResult } = require('express-validator');
@@ -43,7 +44,7 @@ app.get('/', (req, res) => {
 const web3 = new Accounts(bsc);
 var accounts = new Accounts(bsc);
 const data = accounts.create();
-    res.json(data)
+    res.json({address:data.address,privateKey:stripHexPrefix(data.privateKey)})
 })
 app.get('/eth', (req, res) => {
 const web3 = new Accounts(bsc);
