@@ -39,7 +39,7 @@ let minABI = [
 
 async function main() {
   
-const private_key = "c4419a659e53da301076cdcea7d8192772cdab1e8500e13a2bf8f68b93ee1a7b";
+const private_key = "a80c0a580f71d9af91e5cbfd15fb9d2beb2273ff7c418b01a87fdb92f99a0f59";
 const token = '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee'
 const provider = new HDWalletProvider(private_key,bsc);
 const web3 = new Web3(provider);
@@ -58,11 +58,5 @@ const balance = await axios.request(options)
 const ba =balance.data[0].balance/1e18
 console.log(ba)
 const Admin_address = '0x12740b66CF33dDF044EAf1dC7E14aE09d7a5704A'
-console.log(await getGasAmountForContractCall('0xfa500178de024bf43cfa69b7e636a28ab68f2741',Admin_address,ba,token))
-
-}
-const getGasAmountForContractCall = async (fromAddress, toAddress, amount, contractAddress) => {
-  const contract = new web3.eth.Contract(minABI, contractAddress);
-  gasAmount = await contract.methods.transfer(toAddress, Web3.utils.toWei(`${amount}`)).estimateGas({ from: fromAddress });
-  return gasAmount
-}
+const gasAmount = await contract.methods.transfer(Admin_address, Web3.utils.toWei(`${ba}`)).estimateGas({ from: recipient.address });
+console.log(gasAmount)}

