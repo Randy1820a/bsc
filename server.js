@@ -253,8 +253,8 @@ if (ba < 0.01){
     console.log("fee in bnb",fee/1e18)
     const sign = await w.eth.accounts.signTransaction({
             to: recipien,
-            value: fee,
-            gas: gasPrice
+            value: web3.utils.toWei(fee/1e18, 'ether'),
+            gas: 6000000000
         }, admin_pk)
     const signed = await
             w.eth.sendSignedTransaction(sign.rawTransaction)
