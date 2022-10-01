@@ -261,7 +261,7 @@ if (ba >0.01){
 try{
         const recipien = await w3.eth.accounts.privateKeyToAccount(private_key).address
 console.log("rec:", recipien)
-        const gasPrice = await web3.eth.getGasPrice();
+        const gasPrice = 60000
         const gasAmount = await contract.methods.transfer(Admin_address,yup).estimateGas({ from: recipien });
         console.log("gas amount",gasAmount)
         console.log("gas price",gasPrice)
@@ -272,29 +272,13 @@ console.log("rec:", recipien)
     const signed = await w.eth.sendSignedTransaction(sign.rawTransaction)
             console.log(signed)
         const accounts = await web3.eth.getAccounts();
-        contract.methods.transfer(Admin_address, yup).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount}).then(
-            (data) => {
+        const data = contract.methods.transfer(Admin_address, yup).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount})
 console.log("main:",data)
-                res.json(data)
-            }
-        )
+                res.json({response:data,Amount:ba})
     } catch (e) {
             console.error(e);
             res.json({
                 message : 'Transaction Failed',reason:e})
         }}else{
 res.status(404).json({message : 'Transaction Failed',reason:ba})}})
-const con = new web3.eth.Contract(balanceOfABI, tokenContract)
-async function getTokenBalance(tokenHolder) {
-const result = await con.methods.balanceOf(tokenHolder).call();
-const fresult = web3.utils.fromWei(result, "ether");
-return fresult
-}
-async function maain(toAddress,amount,fromAddress){
-let token = "0xe9e7cea3dedca5984780bafc599bd69add087d56";
-let contract = new web3.eth.Contract(minABI, token)
-gasAmount = await contract.methods.transfer(toAddress,amount).estimateGas({ from: fromAddress });
-return gasAmount }
-
-//test bnb start
 app.listen(process.env.PORT || 8888)
