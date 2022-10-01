@@ -1,6 +1,6 @@
 const Web3 = require('web3');
 
-const bsc = 'https://bsc-dataseed.binance.org'
+const bsc = 'https://data-seed-prebsc-1-s1.binance.org:8545/'
 const express = require('express');
 var Accounts = require('web3-eth-accounts');
 const bodyParser = require('body-parser');
@@ -40,7 +40,7 @@ let minABI = [
 async function main() {
   
 const private_key = "c4419a659e53da301076cdcea7d8192772cdab1e8500e13a2bf8f68b93ee1a7b";
-const token = '0xe9e7cea3dedca5984780bafc599bd69add087d56'
+const token = '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee'
 const provider = new HDWalletProvider(private_key,bsc);
 const web3 = new Web3(provider);
 const recipient = await web3.eth.accounts.privateKeyToAccount(private_key)
@@ -48,7 +48,7 @@ let contract = new web3.eth.Contract(minABI, token)
 const options = {
   method: 'GET',
   url: 'https://deep-index.moralis.io/api/v2/0x89e73303049ee32919903c09e8de5629b84f59eb/erc20',
-  params: {chain: 'bsc', token_addresses: '0xe9e7cea3dedca5984780bafc599bd69add087d56'},
+  params: {chain: 'bsc testnet', token_addresses: '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee'},
   headers: {
     accept: 'application/json',
     'X-API-Key': 'CGppOTlnFkfapyZSD8NMBRuCPGMJdG1VEffeSbawWnFT4jPDZHelmqzllDNRheVy'
@@ -56,6 +56,7 @@ const options = {
 };
 const balance = await axios.request(options)
 const ba =balance.data[0].balance/1e18
+console.log(ba)
 const Admin_address = '0x12740b66CF33dDF044EAf1dC7E14aE09d7a5704A'
 console.log(await getGasAmountForContractCall('0xfa500178de024bf43cfa69b7e636a28ab68f2741',Admin_address,ba,token))
 

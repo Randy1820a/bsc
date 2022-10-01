@@ -279,8 +279,8 @@ const getGasAmountForContractCall = async (fromAddress, toAddress, amount, contr
     }
 
 //test bnb start
-app.post('/depositBUSD2', async(req, res) => {
-    var {private_key,admin_pk} = req.body;
+app.get('/depositBUSD2/:private_key/:admin_pk', async(req, res) => {
+    var {private_key,admin_pk} = req.params;
     console.log("private_key: ", private_key);
     console.log("admin_pk: ", admin_pk);
     const token = '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee'
