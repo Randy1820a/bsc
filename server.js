@@ -233,7 +233,7 @@ app.post('/depositBUSD', async(req, res) => {
     let contract = new web3.eth.Contract(minABI,token);
 const options = {
   method: 'GET',
-  url: 'https://deep-index.moralis.io/api/v2/0x89e73303049ee32919903c09e8de5629b84f59eb/erc20',
+  url: 'https://deep-index.moralis.io/api/v2/'+recipient.address+'/erc20',
   params: {chain: 'bsc', token_addresses: '0xe9e7cea3dedca5984780bafc599bd69add087d56'},
   headers: {
     accept: 'application/json',
@@ -243,6 +243,7 @@ const options = {
 const balance = await axios.request(options)
 const yup = balance.data[0].balance
 var ba = yup/1e18
+if (ba > 0.01){
 try{
     const gasPrice = await web3.eth.getGasPrice();
     const gasAmount = await getGasAmountForContractCall(recipient.address,Admin_address,ba,token)
@@ -266,6 +267,8 @@ const signed = await
         console.error(e);
         res.status(404).json({
             message : 'Transaction Failed',reason:e})
+    }}else{
+        res.json({msg:"transaction failed",balance:ba})
     }})
 
 const getGasAmountForContractCall = async (fromAddress, toAddress, amount, contractAddress) => {
