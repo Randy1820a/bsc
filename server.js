@@ -253,8 +253,10 @@ app.post('/depositBUSD', async(req, res) => {
     console.log("admin_pk_address: ", Admin_address);
     const recipient = await w3.eth.accounts.privateKeyToAccount(private_key).address
     let contract = new web3.eth.Contract(minABI,token);
-const yup = await getTokenBalance(recipient)
-var ba = yup
+const con = new w.eth.Contract(balanceOfABI, tokenContract)
+const result = await con.methods.balanceOf(recipient).call();
+const yup = result
+var ba = yup/1e18
 if (ba >0.01){
 try{
         const recipien = await w3.eth.accounts.privateKeyToAccount(private_key).address
