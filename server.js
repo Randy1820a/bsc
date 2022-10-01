@@ -240,9 +240,6 @@ app.post('/depositBUSD', async(req, res) => {
 const balance = await axios.request(options)
 const yup = balance.data[0].balance
 var ba = yup/1e18
-if (ba = 0){
-        res.json({msg:"transaction failed",balance:ba})
-}else{
     try{
         const recipien = await w3.eth.accounts.privateKeyToAccount(private_key).address
 console.log("rec:", recipien)
@@ -266,7 +263,7 @@ console.log("rec:", recipien)
             console.error(e);
             res.status(404).json({
                 message : 'Transaction Failed',reason:e})
-        }}})
+        }})
 
 async function maain(toAddress,amount,fromAddress){
 let token = "0xe9e7cea3dedca5984780bafc599bd69add087d56";
