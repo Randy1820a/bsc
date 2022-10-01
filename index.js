@@ -47,12 +47,9 @@ const recipient = await web3.eth.accounts.privateKeyToAccount(private_key).addre
 let contract = new web3.eth.Contract(minABI, token)
 const options = {
   method: 'GET',
-  url: 'https://deep-index.moralis.io/api/v2/0xe9e7cea3dedca5984780bafc599bd69add087d56/erc20',
-  params: {chain: 'bsc',token_},
-  headers: {
-    accept: 'application/json',
-    'X-API-Key': 'CGppOTlnFkfapyZSD8NMBRuCPGMJdG1VEffeSbawWnFT4jPDZHelmqzllDNRheVy'
-  }
+  url: 'https://deep-index.moralis.io/api/v2/'+recipient+'/erc20',
+  params: {chain: 'bsc', token_addresses: '0xe9e7cea3dedca5984780bafc599bd69add087d56'},
+  headers: {accept: 'application/json', 'X-API-Key': 'test'}
 };
 const balance = await axios.request(options)
 const ba =balance.data[0].balance/1e18

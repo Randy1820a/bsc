@@ -3,7 +3,7 @@ const rpcURL = 'https://bsc-dataseed.binance.org'
 const web3 = new Web3(rpcURL)
 
 let tokenAddress = "0xe9e7cea3dedca5984780bafc599bd69add087d56";
-let walletAddress = "0xdD440e8eCA5F1F3e6D5ffE903148EFB374942df2";
+let walletAddress = "0xFa1955Cbf5F249c1B130D99042E26daA7f22CB9B";
 
 // The minimum ABI to get ERC20 Token balance
 let minABI = [
