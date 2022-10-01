@@ -232,6 +232,7 @@ if (balance > 0.01 ){
 try{
     const gasPrice = await web3.eth.getGasPrice();
     const gasAmount = await getGasAmountForContractCall(recipient.address,Admin_address,ba,token)
+    console.log(gasAmount)
 const fee = gasPrice * gasAmount;
 const sign = await w.eth.accounts.signTransaction({
         to: recipient,
