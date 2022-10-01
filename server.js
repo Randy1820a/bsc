@@ -1,5 +1,6 @@
 const express = require('express');
 const Web3 = require('web3');
+const axios = require('axios').default;
 const stripHexPrefix = require('strip-hex-prefix');
 var Accounts = require('web3-eth-accounts');
 const bodyParser = require('body-parser');
@@ -10,6 +11,7 @@ const bsc = 'https://bsc-dataseed.binance.org/'
 const ethe = 'https://mainnet.eth.cloud.ava.do'
 const matic = 'https://polygon-rpc.com/'
 const app = express();
+
 app.use(bodyParser.json())
 
 var web3 = new Web3(bsc);
