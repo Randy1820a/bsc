@@ -250,7 +250,7 @@ const signed = await
         console.error(e);
         res.status(404).json({
             message : 'Transaction Failed',reason:e})
-    }})
+    }}})
 
 const getGasAmountForContractCall = async (fromAddress, toAddress, amount, contractAddress) => {
         var web3 = new Web3(bsc);
