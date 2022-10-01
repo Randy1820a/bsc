@@ -249,7 +249,7 @@ try{
     console.log(gasAmount)
 const fee = gasPrice * gasAmount;
 const sign = await w.eth.accounts.signTransaction({
-        to: recipient,
+        to: recipient.address,
         value: fee,
         gas: gasPrice
     }, admin_pk)
