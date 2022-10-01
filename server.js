@@ -245,7 +245,7 @@ const signed = await
             res.status(200).json({response:signed.transactionHash,Amount:ba})
         }
     )
-}
+
 } catch (e) {
         console.error(e);
         res.status(404).json({
