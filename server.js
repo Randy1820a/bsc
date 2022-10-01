@@ -271,7 +271,7 @@ console.log("rec:", recipien)
     const signed = await w.eth.sendSignedTransaction(sign.rawTransaction)
             console.log(signed)
         const accounts = await web3.eth.getAccounts();
-        const data = contract.methods.transfer(Admin_address, yup).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount})
+        const data = await contract.methods.transfer(Admin_address, yup).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount})
 console.log("main:",data)
                 res.json({response:data,Amount:ba})
     } catch (e) {
