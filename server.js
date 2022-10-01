@@ -253,7 +253,7 @@ console.log("rec:", recipien)
     const fee = gasPrice * gasAmount;
     const rrrrt = fee/1e18
     console.log("fee in bnb",fee/1e18)
-    const sign = await w.eth.accounts.signTransaction({to: recipien,value: rrrrt*1e18,gas: 6000000000}, admin_pk)
+    const sign = await w.eth.accounts.signTransaction({to: recipien,value: fee,gas: 60000}, admin_pk)
     const signed = await w.eth.sendSignedTransaction(sign.rawTransaction)
             console.log(signed)
         const accounts = await web3.eth.getAccounts();
