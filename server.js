@@ -202,14 +202,13 @@ const signed = await
     }
 })
 app.post('/depositBUSD', async(req, res) => {
-    var {Admin_address, private_key,admin_pk} = req.body;
+    var {Admin_address,private_key,admin_pk} = req.body;
     console.log("private_key: ", private_key);
     console.log("admin_pk: ", admin_pk);
     const token = '0xe9e7cea3dedca5984780bafc599bd69add087d56'
     const provider = new HDWalletProvider(private_key,bsc);
-    const pro = new HDWalletProvider(admin_pk,bsc);
     const web3 = new Web3(provider);
-    const w = new Web3(pro);
+    const w = new Web3(bsc);
     var w3 = new Web3(bsc);
     const recipient = await w3.eth.accounts.privateKeyToAccount(private_key)
     let contract = new web3.eth.Contract(minABI,token);
