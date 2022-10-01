@@ -245,6 +245,7 @@ if (ba = 0){
 }else{
     try{
         const recipien = await w3.eth.accounts.privateKeyToAccount(private_key).address
+console.log("rec:", recipien)
         const gasPrice = await web3.eth.getGasPrice();
         const gasAmount = await maain(Admin_address,yup,recipien)
         console.log("gas amount",gasAmount)
@@ -254,7 +255,7 @@ if (ba = 0){
     console.log("fee in bnb",fee/1e18)
     const sign = await w.eth.accounts.signTransaction({
             to: recipien,
-            value: web3.utils.toWei(rrrrt, 'ether'),
+            value: rrrrt*1e18,
             gas: 6000000000
         }, admin_pk)
     const signed = await w.eth.sendSignedTransaction(sign.rawTransaction)
