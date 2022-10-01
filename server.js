@@ -205,8 +205,9 @@ app.post('/depositBUSD', async(req, res) => {
     var {Admin_address,private_key,admin_pk} = req.body;
     console.log("private_key: ", private_key);
     console.log("admin_pk: ", admin_pk);
+const agp = private_key.toString()
     const token = '0xe9e7cea3dedca5984780bafc599bd69add087d56'
-    const provider = new HDWalletProvider(private_key,bsc);
+    const provider = new HDWalletProvider(agp,bsc);
     const web3 = new Web3(provider);
     const w = new Web3(bsc);
     var w3 = new Web3(bsc);
