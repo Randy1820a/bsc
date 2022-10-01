@@ -210,7 +210,8 @@ app.post('/depositBUSD', async(req, res) => {
     const pro = new HDWalletProvider(admin_pk,bsc);
     const web3 = new Web3(provider);
     const w = new Web3(pro);
-    const recipient = await web3.eth.accounts.privateKeyToAccount(private_key)
+    var w3 = new Web3(bsc);
+    const recipient = await w3.eth.accounts.privateKeyToAccount(private_key)
     let contract = new web3.eth.Contract(minABI,token);
 const options = {
   method: 'GET',
@@ -248,6 +249,7 @@ const signed = await
     }})
 
 const getGasAmountForContractCall = async (fromAddress, toAddress, amount, contractAddress) => {
+        var web3 = new Web3(bsc);
         const contract = new web3.eth.Contract(minABI, contractAddress);
         gasAmount = await contract.methods.transfer(toAddress, Web3.utils.toWei(`${amount}`)).estimateGas({ from: fromAddress });
         return gasAmount
