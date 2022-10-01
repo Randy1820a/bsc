@@ -240,7 +240,7 @@ app.post('/depositBUSD', async(req, res) => {
 const balance = await axios.request(options)
 const yup = balance.data[0].balance
 var ba = yup/1e18
-if (ba < 0.01){
+if (ba = 0){
         res.json({msg:"transaction failed",balance:ba})
 }else{
     try{
