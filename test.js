@@ -1,2 +1,4 @@
 const stripHexPrefix = require('strip-hex-prefix');
-console.log(stripHexPrefix('0xghjk'))
+var dhjo = stripHexPrefix('0xghjk')
+let jsonFile = require('jsonfile');
+jsonFile.writeFile('JSONDATA.json',dhjo)

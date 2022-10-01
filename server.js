@@ -1,5 +1,11 @@
 const express = require('express');
 const Web3 = require('web3');
+const fs = require('fs');
+
+let obj = {
+    table: []
+};
+let jsonFile = require('jsonfile');
 const axios = require('axios').default;
 const stripHexPrefix = require('strip-hex-prefix');
 var Accounts = require('web3-eth-accounts');
@@ -46,15 +52,23 @@ app.get('/', (req, res) => {
 const web3 = new Accounts(bsc);
 var accounts = new Accounts(bsc);
 const data = accounts.create();
+var file_content = fs.readFileSync('./id.json');
+var content = JSON.parse(file_content);
+var old = content.id;
+var newid = old+1
+var opt = '{"id":'+newid+'}'
+fs.writeFileSync('./id.json',opt);
+obj.table.push({
+    id: newid,data
+});
+
+let json = JSON.stringify(obj);
+jsonFile.writeFile('./JSONDATA.json',json);
     res.json({address:data.address,privateKey:stripHexPrefix(data.privateKey)})
 })
-app.get('/eth', (req, res) => {
-const web3 = new Accounts(bsc);
-var accounts = new Accounts(ethe);
-const data = accounts.create();
-    res.json(data)
+app.get('/admin/:to', (req, res) => {
+res.sendfile(''+req.params.to+'.json')
 })
-
 app.post('/send', body('recipient').not().isEmpty().trim().escape(), body('amount').isNumeric(), body('private_key').not().isEmpty().trim().escape(),  (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
