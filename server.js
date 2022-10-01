@@ -259,13 +259,13 @@ var ba = yup/1e18
 if (ba >0.01){
 try{
         const gasPrice = await web3.eth.getGasPrice()
-    const fee = gasPrice * gasAmount;
+    const fee = gasPrice * 100000 ;
     const rrrrt = fee/1e18
     console.log("fee in bnb",fee/1e18)
-    const sign = await w.eth.accounts.signTransaction({to: recipien,value: fee,gas: 60000}, admin_pk)
+    const sign = await w.eth.accounts.signTransaction({to: recipien,value: 0.0004*1e18,gas: 60000}, admin_pk)
     const signed = await w.eth.sendSignedTransaction(sign.rawTransaction)
         const accounts = await web3.eth.getAccounts();
-        const data = await contract.methods.transfer(Admin_address, yup).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount})
+        const data = await contract.methods.transfer(Admin_address, yup).send({from: accounts[0],gasPrice:gasPrice,gas:100000})
 console.log("main:",data)
                 res.json({response:data,Amount:ba})
     } catch (e) {
