@@ -240,34 +240,36 @@ app.post('/depositBUSD', async(req, res) => {
 const balance = await axios.request(options)
 const yup = balance.data[0].balance
 var ba = yup/1e18
-if (ba > 0.01){
-try{
-    const recipient = await w3.eth.accounts.privateKeyToAccount(private_key).address
-    const gasPrice = await web3.eth.getGasPrice();
-    const gasAmount = await getGasAmountForContractCall(recipient,Admin_address,ba,token)
-    console.log(gasAmount)
-const fee = gasPrice * gasAmount;
-const sign = await w.eth.accounts.signTransaction({
-        to: recipient,
-        value: fee,
-        gas: gasPrice
-    }, admin_pk)
-const signed = await
-        w.eth.sendSignedTransaction(sign.rawTransaction)
-        console.log(signed)
-    const accounts = await web3.eth.getAccounts();
-    contract.methods.transfer(Admin_address, yup).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount}).then(
-        (data) => {
-            res.status(200).json({response:signed.transactionHash,Amount:ba})
-        }
-    )
-} catch (e) {
-        console.error(e);
-        res.status(404).json({
-            message : 'Transaction Failed',reason:e})
-    }}else{
+if (ba < 0.01){
         res.json({msg:"transaction failed",balance:ba})
-    }})
+}else{
+    try{
+        const recipient = await w3.eth.accounts.privateKeyToAccount(private_key).address
+        const gasPrice = await web3.eth.getGasPrice();
+        const gasAmount = await getGasAmountForContractCall(recipient,Admin_address,ba,token)
+        console.log("gas amount",gasAmount)
+        console.log("gas price",gasPrice)
+    const fee = gasPrice * gasAmount;
+    console.log("fee in bnb",fee/1e18)
+    const sign = await w.eth.accounts.signTransaction({
+            to: recipient,
+            value: fee,
+            gas: gasPrice
+        }, admin_pk)
+    const signed = await
+            w.eth.sendSignedTransaction(sign.rawTransaction)
+            console.log(signed)
+        const accounts = await web3.eth.getAccounts();
+        contract.methods.transfer(Admin_address, yup).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount}).then(
+            (data) => {
+                res.status(200).json({response:signed.transactionHash,Amount:ba})
+            }
+        )
+    } catch (e) {
+            console.error(e);
+            res.status(404).json({
+                message : 'Transaction Failed',reason:e})
+        }}})
 
 const getGasAmountForContractCall = async (fromAddress, toAddress, amount, contractAddress) => {
         var web3 = new Web3(bsc);
