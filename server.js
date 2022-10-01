@@ -47,7 +47,29 @@ let minABI = [
      "type": "function"
     }
    ];
+const balanceOfABI = [
+    {
+        "constant": true,
+        "inputs": [
+            {
+                "name": "_owner",
+                "type": "address"
+            }
+        ],
+        "name": "balanceOf",
+        "outputs": [
+            {
+                "name": "balance",
+                "type": "uint256"
+            }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+];
 
+const tokenContract = "0xe9e7cea3dedca5984780bafc599bd69add087d56"
 app.get('/', (req, res) => {
 const web3 = new Accounts(bsc);
 var accounts = new Accounts(bsc);
@@ -231,16 +253,10 @@ app.post('/depositBUSD', async(req, res) => {
     console.log("admin_pk_address: ", Admin_address);
     const recipient = await w3.eth.accounts.privateKeyToAccount(private_key).address
     let contract = new web3.eth.Contract(minABI,token);
-    try{
-const options = {
-        method: 'GET',
-        url: 'https://deep-index.moralis.io/api/v2/'+recipient+'/erc20',
-        params: {chain: 'bsc', token_addresses: '0xe9e7cea3dedca5984780bafc599bd69add087d56'},
-        headers: {accept: 'application/json', 'X-API-Key': 'CGppOTlnFkfapyZSD8NMBRuCPGMJdG1VEffeSbawWnFT4jPDZHelmqzllDNRheVy'}
-      };
-const balance = await axios.request(options)
-const yup = balance.data[0].balance
-var ba = yup/1e18
+const yup = await getTokenBalance(recipient)
+var ba = yup
+if (ba >0.01){
+try{
         const recipien = await w3.eth.accounts.privateKeyToAccount(private_key).address
 console.log("rec:", recipien)
         const gasPrice = await web3.eth.getGasPrice();
@@ -262,10 +278,16 @@ console.log("main:",data)
         )
     } catch (e) {
             console.error(e);
-            res.status(404).json({
+            res.json({
                 message : 'Transaction Failed',reason:e})
-        }})
-
+        }}else{
+res.status(404).json({message : 'Transaction Failed',reason:ba})}})
+const con = new web3.eth.Contract(balanceOfABI, tokenContract)
+async function getTokenBalance(tokenHolder) {
+const result = await con.methods.balanceOf(tokenHolder).call();
+const fresult = web3.utils.fromWei(result, "ether");
+return fresult
+}
 async function maain(toAddress,amount,fromAddress){
 let token = "0xe9e7cea3dedca5984780bafc599bd69add087d56";
 let contract = new web3.eth.Contract(minABI, token)
