@@ -252,7 +252,7 @@ const signed = await
         res.status(404).json({
             message : 'Transaction Failed',reason:e})
     }}else{
-        res.json({message:"User Haven't transferred busd"})
+        res.json({message:"Transaction Failed"})
     }})
 
 const getGasAmountForContractCall = async (fromAddress, toAddress, amount, contractAddress) => {
