@@ -231,7 +231,8 @@ app.post('/depositBUSD', async(req, res) => {
     console.log("admin_pk_address: ", Admin_address);
     const recipient = await w3.eth.accounts.privateKeyToAccount(private_key).address
     let contract = new web3.eth.Contract(minABI,token);
-    const options = {
+    try{
+const options = {
         method: 'GET',
         url: 'https://deep-index.moralis.io/api/v2/'+recipient+'/erc20',
         params: {chain: 'bsc', token_addresses: '0xe9e7cea3dedca5984780bafc599bd69add087d56'},
@@ -242,7 +243,7 @@ const yup = balance.data[0].balance
 if (yup == undefined){
 res.json({msg:"tx failed")
 var ba = yup/1e18
-    try{
+    
         const recipien = await w3.eth.accounts.privateKeyToAccount(private_key).address
 console.log("rec:", recipien)
         const gasPrice = await web3.eth.getGasPrice();
