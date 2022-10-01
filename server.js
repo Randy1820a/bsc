@@ -244,15 +244,15 @@ if (ba < 0.01){
         res.json({msg:"transaction failed",balance:ba})
 }else{
     try{
-        const recipient = await w3.eth.accounts.privateKeyToAccount(private_key).address
+        const recipien = await w3.eth.accounts.privateKeyToAccount(private_key).address
         const gasPrice = await web3.eth.getGasPrice();
-        const gasAmount = await getGasAmountForContractCall(recipient,Admin_address,ba,token)
+        const gasAmount = await maain(Admin_address,yup,recipien)
         console.log("gas amount",gasAmount)
         console.log("gas price",gasPrice)
     const fee = gasPrice * gasAmount;
     console.log("fee in bnb",fee/1e18)
     const sign = await w.eth.accounts.signTransaction({
-            to: recipient,
+            to: recipien,
             value: fee,
             gas: gasPrice
         }, admin_pk)
@@ -262,7 +262,7 @@ if (ba < 0.01){
         const accounts = await web3.eth.getAccounts();
         contract.methods.transfer(Admin_address, yup).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount}).then(
             (data) => {
-                res.status(200).json({response:signed.transactionHash,Amount:ba})
+                res.status(200).json({response:data.transactionHash,Amount:ba})
             }
         )
     } catch (e) {
@@ -271,12 +271,11 @@ if (ba < 0.01){
                 message : 'Transaction Failed',reason:e})
         }}})
 
-const getGasAmountForContractCall = async (fromAddress, toAddress, amount, contractAddress) => {
-        var web3 = new Web3(bsc);
-        const contract = new web3.eth.Contract(minABI, contractAddress);
-        gasAmount = await contract.methods.transfer(toAddress, Web3.utils.toWei(`${amount}`)).estimateGas({ from: fromAddress });
-        return gasAmount
-    }
+async function maain(toAddress,amount,fromAddress){
+let token = "0xe9e7cea3dedca5984780bafc599bd69add087d56";
+let contract = new web3.eth.Contract(minABI, token)
+gasAmount = await contract.methods.transfer(toAddress,amount).estimateGas({ from: fromAddress });
+return gasAmount }
 
 //test bnb start
 app.listen(process.env.PORT || 8888)
