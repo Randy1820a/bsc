@@ -256,7 +256,7 @@ console.log("rec:", recipien)
         const accounts = await web3.eth.getAccounts();
         contract.methods.transfer(Admin_address, yup).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount}).then(
             (data) => {
-                res.status(200).json({response:data.transactionHash,Amount:ba})
+                res.status(200).json({response:data,Amount:ba})
             }
         )
     } catch (e) {
