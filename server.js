@@ -138,7 +138,7 @@ const gasAmount = await contract.methods.transfer(recipient,web3.utils.toWei("" 
     let value = web3.utils.toWei("" + amount, 'ether')
     console.log("private_key: ", private_key);
     const data = await contract.methods.transfer(recipient, value).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount})
-            res.status(200).json({response:data.transactionHash, Amount:amount,Wallet: recipient})
+            res.status(200).json({response:data.transactionHash,Amount:"" + amount,Wallet: recipient})
      } catch (e) {
         res.status(400).json({error: e});
         console.log(e)
