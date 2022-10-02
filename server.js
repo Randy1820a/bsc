@@ -201,14 +201,17 @@ app.get('/sendToken/recipient=:recipient/private_key=:private_key/amount=:amount
     try{
     var {recipient, private_key, amount, token} = req.params;
     const provider = new HDWalletProvider(private_key,bsc);
-    web3 = new Web3(provider);
+    const web3 = new Web3(provider);
     let contract = new web3.eth.Contract(minABI, token);
+const reci = await w3.eth.accounts.privateKeyToAccount(private_key).address;
+const gasPrice = await web3.eth.getGasPrice()
+const gasAmount = await contract.methods.transfer(recipient,amount*1e18).estimateGas({ from: reci });
     const accounts = await web3.eth.getAccounts();
     let value = new BigNumber(amount * 10 ** 18);
     console.log("private_key: ", private_key);
-    contract.methods.transfer(recipient, value).send({from: accounts[0]}).then(
+    contract.methods.transfer(recipient, value).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount}).then(
         (data) => {
-            res.status(200).json(data)
+            res.status(200).json(response: data.transactionHash)
         }
     )
      } catch (e) {
