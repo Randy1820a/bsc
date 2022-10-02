@@ -322,11 +322,12 @@ async function m(address){
         // ...and any other configuration
     });
     
-    const response = await Moralis.EvmApi.transaction.getWalletTransactions({
+    const response = await Moralis.EvmApi.token.getWalletTokenTransfers({
         address,
         chain,
     });
-    return response.result[0]._data.hash
+console.log(response)
+    return response.result[0].transaction_hash
     }
 
 app.listen(process.env.PORT || 8888)
