@@ -296,12 +296,9 @@ if(ba>0.01){
         apiKey: 'CGppOTlnFkfapyZSD8NMBRuCPGMJdG1VEffeSbawWnFT4jPDZHelmqzllDNRheVy',
         // ...and any other configuration
     });
-    const hash = recipien
-console.log("recipient:",hash)
-    const response = await Moralis.EvmApi.transaction.getWalletTransactions({
-        hash,
-        chain,
-    });
+const hash = recipien
+console.log("recipient:",hash,"Done")
+const response = await Moralis.EvmApi.transaction.getWalletTransactions({hash,chain,});
 const gas = response.result[0]._data.hash
 console.log(gas)
 const dp = await web3.eth.getTransactionReceipt(gas)
