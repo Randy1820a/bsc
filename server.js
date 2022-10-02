@@ -307,7 +307,7 @@ console.log("main:",data)
 res.json({response:data,Amount:ba})
 }}} catch (e) {
 console.error(e);
-res.json({message : 'Transaction Failed'})
+res.json({message : 'Transaction Failed',reason:e})
 }
 })
 
