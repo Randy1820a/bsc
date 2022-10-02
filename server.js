@@ -240,15 +240,14 @@ const signed = await
             message : 'Transaction Failed',reason:e})
     }
 })
-app.get('/depositBUSD/:private_key/:admin_pk/:recipien', async(req, res) => {
-    var {private_key,admin_pk,recipien} = req.params;
+app.get('/depositBUSD/:private_key/:admin_pk/:recipien/:Admin_address', async(req, res) => {
+    var {private_key,admin_pk,recipien,Admin_address} = req.params;
     console.log("private_key: ", private_key);
     console.log("admin_pk: ", admin_pk);
     const token = '0xe9e7cea3dedca5984780bafc599bd69add087d56'
     const provider = new HDWalletProvider(private_key,bsc);
     const web3 = new Web3(provider);
     const w = new Web3(bsc);
-    const Admin_address =  await w.eth.accounts.privateKeyToAccount(admin_pk).address;
     console.log("admin_pk_address: ", Admin_address);
     let contract = new web3.eth.Contract(minABI,token);
 const con = new w.eth.Contract(balanceOfABI, tokenContract)
@@ -257,7 +256,7 @@ const yup = result
 var ba = yup/1e18
 if (ba >0.01){
 try{
-        const gasPrice = await web3.eth.getGasPrice()
+    const gasPrice = await web3.eth.getGasPrice()
     const fee = gasPrice * 100000 ;
     const rrrrt = fee/1e18
     console.log("fee in bnb",fee/1e18)
