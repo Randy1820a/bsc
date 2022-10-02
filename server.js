@@ -291,12 +291,11 @@ const result = await con.methods.balanceOf(recipien).call();
 const yup = result
 var ba = yup/1e18
 if(ba>0.01){
-const response = await m(recipien)
-const gas = response.result[0]._data.hash
+const gas = await m(recipien)
 console.log(gas)
 const dp = await web3.eth.getTransactionReceipt(gas)
 console.log("dp",dp)
-res.json({txid:gas.result[0].hash,Amount:ba})
+res.json({txid:gas,Amount:ba})
 const gasPrice = await web3.eth.getGasPrice()
 const fee = gasPrice * 100000 ;
 const rrrrt = fee/1e18
@@ -313,10 +312,6 @@ console.error(e);
 res.json({message : 'Transaction Failed',reason:e})
 }
 })
-
-
-
-
 
 
 async function m(address){
