@@ -329,12 +329,10 @@ async function m(address){
         chain,
     });
 console.log(response)
-   console.log('main',response.result)
-       console.log('main',response.result[0])
+   console.log('main4',response.result)
+       console.log('main1',response.result[0])
     console.log('main2',response.result[0]._data)
-    console.log('main3',response.result[0].Erc20Transfer._data)
-    console.log('main4',response.result[0]._data.transactionHash)
-        console.log('main5',response.result[0].Erc20Transfer._data.transactionHash)
+    console.log('main3',response.result[0]._data.transactionHash)
     return response.result[0]._data.transaction_hash
     }
 
