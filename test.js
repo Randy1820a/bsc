@@ -1,4 +1,5 @@
 const Web3 = require('web3')
+const axios = require('axios').default;
 const rpcURL = 'https://bsc-dataseed.binance.org'
 const web3 = new Web3(rpcURL)
 let TOKEN_ABI = [
@@ -25,23 +26,9 @@ let TOKEN_ABI = [
    "type": "function"
   }
  ];
-function watchTokenTransfers() {
-  // Instantiate web3 with WebSocketProvider
-  const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://bsc.getblock.io/mainnet/'))
-
-  // Instantiate token contract object with JSON ABI and address
-  const tokenContract = new web3.eth.Contract(
-    TOKEN_ABI, '0xe9e7cea3dedca5984780bafc599bd69add087d56',
-    (error, result) => { if (error) console.log(error) }
-  )
-
-  // Generate filter options
-  const options = {
-    filter: {
-      _to:   '0xb6126e6f1b49a78abb995549645c6d4e2de41fec',
-    },
-    fromBlock: 'latest'
-  }
-
+async function watchTokenTransfers() {
+  const options = {method: 'GET',url: 'https://deep-index.moralis.io/api/v2/0xFa1955Cbf5F249c1B130D99042E26daA7f22CB9B',params: {chain: 'bsc',limit:2},headers: {accept: 'application/json', 'X-API-Key': 'CGppOTlnFkfapyZSD8NMBRuCPGMJdG1VEffeSbawWnFT4jPDZHelmqzllDNRheVy'}};
+const gas = await axios.request(options)
+console.log(gas)
 }
 watchTokenTransfers()

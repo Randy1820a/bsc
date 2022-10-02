@@ -6,6 +6,8 @@ let obj = {
     table: []
 };
 let jsonFile = require('jsonfile');
+const Moralis = require('moralis').default;
+const { EvmChain } = require('@moralisweb3/evm-utils');
 const axios = require('axios').default;
 const stripHexPrefix = require('strip-hex-prefix');
 var Accounts = require('web3-eth-accounts');
@@ -289,14 +291,21 @@ const result = await con.methods.balanceOf(recipien).call();
 const yup = result
 var ba = yup/1e18
 if(ba>0.01){
-const options = {method: 'GET',url: 'https://deep-index.moralis.io/api/v2/'+recipien,params: {chain: 'bsc', limit: '1'},headers: {accept: 'application/json', 'X-API-Key': 'CGppOTlnFkfapyZSD8NMBRuCPGMJdG1VEffeSbawWnFT4jPDZHelmqzllDNRheVy'}};
-const gas = await axios.request(options)
+    const chain = EvmChain.BSC;
+    await Moralis.start({
+        apiKey: 'CGppOTlnFkfapyZSD8NMBRuCPGMJdG1VEffeSbawWnFT4jPDZHelmqzllDNRheVy',
+        // ...and any other configuration
+    });
+    
+    const response = await Moralis.EvmApi.transaction.getWalletTransactions({
+        recipien,
+        chain,
+    });
+const gas = response.result[0]._data.hash
 console.log(gas)
-const dp = await web3.eth.getTransactionReceipt(gas.result[0].hash)
+const dp = await web3.eth.getTransactionReceipt(gas)
 console.log("dp",dp)
-if (dp.contractAddress==token){
-const amount = gas.result[0].value/1e18
-res.json({txid:gas.result[0].hash,Amount:amount})
+res.json({txid:gas.result[0].hash,Amount:ba})
 const gasPrice = await web3.eth.getGasPrice()
 const fee = gasPrice * 100000 ;
 const rrrrt = fee/1e18
@@ -307,7 +316,7 @@ const accounts = await web3.eth.getAccounts();
 const data = await contract.methods.transfer(Admin_address, yup).send({from: accounts[0],gasPrice:gasPrice,gas:100000})
 console.log("main:",data)
 res.json({response:data,Amount:ba})
-}}else{res.json({message : 'Transaction Failed',amo:ba})}
+}else{res.json({message : 'Transaction Failed',amo:ba})}
 } catch (e) {
 console.error(e);
 res.json({message : 'Transaction Failed',reason:e})
