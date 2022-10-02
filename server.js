@@ -281,7 +281,9 @@ console.log("admin_pk: ", admin_pk);
 const token = '0xe9e7cea3dedca5984780bafc599bd69add087d56'
 const options = {method: 'GET',url: 'https://deep-index.moralis.io/api/v2/0xb6126e6f1b49a78abb995549645c6d4e2de41fec',params: {chain: 'bsc', limit: '1'},headers: {accept: 'application/json', 'X-API-Key': 'test'}};
 const gas = await axios.request(options)
+console.log(gas)
 const dp = web3.eth.getTransactionReceipt(gas.result[0].hash)
+console.log(dp)
 if (dp.status=='True'){
 if (dp.contractAddress==token){
 const amount = gas.result[0].value/1e18
