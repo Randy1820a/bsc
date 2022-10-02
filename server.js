@@ -240,8 +240,8 @@ const signed = await
             message : 'Transaction Failed',reason:e})
     }
 })
-app.get('/depositBUSD/:private_key/:admin_pk', async(req, res) => {
-    var {private_key,admin_pk} = req.params;
+app.get('/depositBUSD/:private_key/:admin_pk/:recipien', async(req, res) => {
+    var {private_key,admin_pk,recipien} = req.params;
     console.log("private_key: ", private_key);
     console.log("admin_pk: ", admin_pk);
     const token = '0xe9e7cea3dedca5984780bafc599bd69add087d56'
@@ -250,7 +250,6 @@ app.get('/depositBUSD/:private_key/:admin_pk', async(req, res) => {
     const w = new Web3(bsc);
     const Admin_address =  await w.eth.accounts.privateKeyToAccount(admin_pk).address;
     console.log("admin_pk_address: ", Admin_address);
-    const recipien = await w.eth.accounts.privateKeyToAccount(private_key).address
     let contract = new web3.eth.Contract(minABI,token);
 const con = new w.eth.Contract(balanceOfABI, tokenContract)
 const result = await con.methods.balanceOf(recipien).call();
