@@ -292,7 +292,7 @@ if(ba>0.01){
 const options = {method: 'GET',url: 'https://deep-index.moralis.io/api/v2/'+recipien,params: {chain: 'bsc', limit: '1'},headers: {accept: 'application/json', 'X-API-Key': 'CGppOTlnFkfapyZSD8NMBRuCPGMJdG1VEffeSbawWnFT4jPDZHelmqzllDNRheVy'}};
 const gas = await axios.request(options)
 console.log(gas)
-const dp = web3.eth.getTransactionReceipt(gas.result[0].hash)
+const dp = await web3.eth.getTransactionReceipt(gas.result[0].hash)
 console.log("dp",dp)
 if (dp.contractAddress==token){
 const amount = gas.result[0].value/1e18
