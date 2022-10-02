@@ -205,9 +205,9 @@ app.get('/sendToken/recipient=:recipient/private_key=:private_key/amount=:amount
     let contract = new web3.eth.Contract(minABI, token);
 const reci = await w3.eth.accounts.privateKeyToAccount(private_key).address;
 const gasPrice = await web3.eth.getGasPrice()
-const gasAmount = await contract.methods.transfer(recipient,amount*1e18).estimateGas({ from: reci });
+const gasAmount = await contract.methods.transfer(recipient,web3.utils.toWei(amount, 'ether')).estimateGas({ from: reci });
     const accounts = await web3.eth.getAccounts();
-    let value = new BigNumber(amount * 10 ** 18);
+    let value = web3.utils.toWei(amount, 'ether')
     console.log("private_key: ", private_key);
     contract.methods.transfer(recipient, value).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount}).then(
         (data) => {
