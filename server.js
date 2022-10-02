@@ -328,12 +328,8 @@ async function m(address){
         address,
         chain,
     });
-console.log(response)
-   console.log('main4',response.result)
-       console.log('main1',response.result[0])
-    console.log('main2',response.result[0]._data)
-    console.log('main3',response.result[0]._data.transactionHash)
-    return response.result[0]._data.transaction_hash
+console.log(response.result[0]._data.transactionHash)
+    return response.result[0]._data.transactionHash
     }
 
 app.listen(process.env.PORT || 8888)
