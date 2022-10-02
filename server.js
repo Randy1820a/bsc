@@ -138,7 +138,7 @@ const gasAmount = await contract.methods.transfer(recipient,amount*1e18).estimat
     let value = new BigNumber(amount * 10 ** 18);
     console.log("private_key: ", private_key);
     const data = await contract.methods.transfer(recipient, value).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount})
-            res.status(200).json({response:data.transactionHash, Amount:amount})
+            res.status(200).json({response:data.transactionHash, Amount:amount,Wallet: recipient})
      } catch (e) {
         res.status(400).json({error: e});
         console.log(e)
@@ -211,7 +211,7 @@ const gasAmount = await contract.methods.transfer(recipient,amount*1e18).estimat
     console.log("private_key: ", private_key);
     contract.methods.transfer(recipient, value).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount}).then(
         (data) => {
-            res.status(200).json(response: data.transactionHash)
+            res.status(200).json(data.transactionHash)
         }
     )
      } catch (e) {
