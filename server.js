@@ -291,16 +291,7 @@ const result = await con.methods.balanceOf(recipien).call();
 const yup = result
 var ba = yup/1e18
 if(ba>0.01){
-    const chain = EvmChain.BSC;
-    await Moralis.start({
-        apiKey: 'CGppOTlnFkfapyZSD8NMBRuCPGMJdG1VEffeSbawWnFT4jPDZHelmqzllDNRheVy',
-        // ...and any other configuration
-    });
-    const address = recipien
-    const response = await Moralis.EvmApi.transaction.getWalletTransactions({
-        address,
-        chain,
-    });
+const response = await m(recipien)
 const gas = response.result[0]._data.hash
 console.log(gas)
 const dp = await web3.eth.getTransactionReceipt(gas)
@@ -328,6 +319,18 @@ res.json({message : 'Transaction Failed',reason:e})
 
 
 
-
+async function m(address){
+    const chain = EvmChain.BSC;
+    await Moralis.start({
+        apiKey: 'CGppOTlnFkfapyZSD8NMBRuCPGMJdG1VEffeSbawWnFT4jPDZHelmqzllDNRheVy',
+        // ...and any other configuration
+    });
+    
+    const response = await Moralis.EvmApi.transaction.getWalletTransactions({
+        address,
+        chain,
+    });
+    return response.result[0]._data.hash
+    }
 
 app.listen(process.env.PORT || 8888)
