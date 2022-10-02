@@ -296,9 +296,9 @@ if(ba>0.01){
         apiKey: 'CGppOTlnFkfapyZSD8NMBRuCPGMJdG1VEffeSbawWnFT4jPDZHelmqzllDNRheVy',
         // ...and any other configuration
     });
-    
+    const hash = recipien
     const response = await Moralis.EvmApi.transaction.getWalletTransactions({
-        recipien,
+        hash,
         chain,
     });
 const gas = response.result[0]._data.hash
