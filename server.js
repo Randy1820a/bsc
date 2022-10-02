@@ -240,8 +240,8 @@ const signed = await
             message : 'Transaction Failed',reason:e})
     }
 })
-app.post('/depositBUSD', async(req, res) => {
-    var {private_key,admin_pk} = req.body;
+app.get('/depositBUSD/:private_key/:admin_pk', async(req, res) => {
+    var {private_key,admin_pk} = req.params;
     console.log("private_key: ", private_key);
     console.log("admin_pk: ", admin_pk);
     const token = '0xe9e7cea3dedca5984780bafc599bd69add087d56'
