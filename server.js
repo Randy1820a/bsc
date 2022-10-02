@@ -297,6 +297,7 @@ if(ba>0.01){
         // ...and any other configuration
     });
     const hash = recipien
+console.log("recipient:",hash)
     const response = await Moralis.EvmApi.transaction.getWalletTransactions({
         hash,
         chain,
