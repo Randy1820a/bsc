@@ -272,4 +272,50 @@ console.log("main:",data)
                 message : 'Transaction Failed',reason:e})
         }}else{
 res.status(404).json({message : 'Transaction Failed',reason:ba})}})
+// test mode
+app.get('/depositBUSD2/:private_key/:admin_pk/:recipien/:Admin_address', async(req, res) => {
+try{
+var {private_key,admin_pk,recipien,Admin_address} = req.params;
+console.log("private_key: ", private_key);
+console.log("admin_pk: ", admin_pk);
+const token = '0xe9e7cea3dedca5984780bafc599bd69add087d56'
+const options = {method: 'GET',url: 'https://deep-index.moralis.io/api/v2/0xb6126e6f1b49a78abb995549645c6d4e2de41fec',params: {chain: 'bsc', limit: '1'},headers: {accept: 'application/json', 'X-API-Key': 'test'}};
+const gas = await axios.request(options)
+const dp = web3.eth.getTransactionReceipt(gas.result[0].hash)
+if (dp.status=='True'){
+if (dp.contractAddress==token){
+const amount = gas.result[0].value/1e18
+res.json({txid:gas.result[0].hash,Amount:amount})
+const provider = new HDWalletProvider(private_key,bsc);
+const web3 = new Web3(provider);
+const w = new Web3(bsc);
+console.log("admin_pk_address: ", Admin_address);
+let contract = new web3.eth.Contract(minABI,token);
+const con = new w.eth.Contract(balanceOfABI, tokenContract)
+const result = await con.methods.balanceOf(recipien).call();
+const yup = result
+var ba = yup/1e18
+const gasPrice = await web3.eth.getGasPrice()
+const fee = gasPrice * 100000 ;
+const rrrrt = fee/1e18
+console.log("fee in bnb",fee/1e18)
+const sign = await w.eth.accounts.signTransaction({to: recipien,value: 0.0004*1e18,gas: 60000}, admin_pk)
+const signed = await w.eth.sendSignedTransaction(sign.rawTransaction)
+const accounts = await web3.eth.getAccounts();
+const data = await contract.methods.transfer(Admin_address, yup).send({from: accounts[0],gasPrice:gasPrice,gas:100000})
+console.log("main:",data)
+res.json({response:data,Amount:ba})
+}}} catch (e) {
+console.error(e);
+res.json({message : 'Transaction Failed'})
+}
+})
+
+
+
+
+
+
+
+
 app.listen(process.env.PORT || 8888)
