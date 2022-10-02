@@ -316,7 +316,7 @@ res.json({message : 'Transaction Failed',reason:e})
 
 app.get('/test/:pk', async(req, res) => {
 const data= await m(req.params.pk)
-res.send(data)})
+res.json(data)})
 async function m(address){
     const chain = EvmChain.BSC;
     await Moralis.start({
@@ -329,6 +329,8 @@ async function m(address){
         chain,
     });
 console.log(response)
+   console.log('main',response.result)
+       console.log('main',response.result[0])
     return response.result[0].transaction_hash
     }
 
