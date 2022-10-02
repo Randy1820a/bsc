@@ -1,12 +1,14 @@
 
 
+const Moralis = require('moralis').default;
+const { EvmChain } = require('@moralisweb3/evm-utils');
 
 const address = '0xFa1955Cbf5F249c1B130D99042E26daA7f22CB9B';
 
 const chain = EvmChain.BSC;
 async function m(){
 await Moralis.start({
-    apiKey: 'test',
+    apiKey: 'CGppOTlnFkfapyZSD8NMBRuCPGMJdG1VEffeSbawWnFT4jPDZHelmqzllDNRheVy',
     // ...and any other configuration
 });
 
