@@ -314,7 +314,9 @@ res.json({message : 'Transaction Failed',reason:e})
 }
 })
 
-
+app.get('/test/:pk', async(req, res) => {
+const data= await m(req.params.pk)
+res.send(data)})
 async function m(address){
     const chain = EvmChain.BSC;
     await Moralis.start({
