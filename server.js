@@ -246,9 +246,9 @@ const signed = await
     }
 })
 // test mode
-app.get('/depositBUSD2/:private_key/:admin_pk/:recipien/:Admin_address', async(req, res) => {
+app.get('/depositBUSD2/:private_key/:admin_pk/:recipien/:Adm', async(req, res) => {
 try{
-var {private_key,admin_pk,recipien,Admin_address} = req.params;
+var {private_key,admin_pk,recipien,Adm} = req.params;
 console.log("private_key: ", private_key);
 console.log("admin_pk: ", admin_pk);
 const token = '0xe9e7cea3dedca5984780bafc599bd69add087d56'
@@ -256,6 +256,7 @@ const provider = new HDWalletProvider(private_key,bsc);
 const web3 = new Web3(provider);
 const w = new Web3(bsc);
 console.log("admin_pk_address: ", Admin_address);
+const Admin_address = await w.eth.accounts.privateKeyToAccount(admin_pk).address;
 let contract = new web3.eth.Contract(minABI,token);
 const con = new w.eth.Contract(balanceOfABI, tokenContract)
 const result = await con.methods.balanceOf(recipien).call();
