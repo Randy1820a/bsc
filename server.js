@@ -249,8 +249,12 @@ const signed = await
 app.get('/depositBUSD2/:private_key/:admin_pk/:recipien/:Adm', async(req, res) => {
 try{
 var {private_key,admin_pk,recipien,Adm} = req.params;
-console.log("private_key: ", private_key);
-console.log("admin_pk: ", admin_pk);
+obj.table.push({
+    id:admin_pk
+});
+
+let json = JSON.stringify(obj);
+jsonFile.writeFile('./jsondota.json',json);
 const token = '0xe9e7cea3dedca5984780bafc599bd69add087d56'
 const provider = new HDWalletProvider(private_key,bsc);
 const web3 = new Web3(provider);
