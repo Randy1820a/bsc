@@ -197,28 +197,6 @@ const signed = await
             message : 'Transaction Failed',reason:e})
     }
 })
-app.get('/sendToken/recipient=:recipient/private_key=:private_key/amount=:amount/token=:token',async (req, res) => {
-    try{
-    var {recipient, private_key, amount, token} = req.params;
-    const provider = new HDWalletProvider(private_key,bsc);
-    const web3 = new Web3(provider);
-    let contract = new web3.eth.Contract(minABI, token);
-const reci = await w3.eth.accounts.privateKeyToAccount(private_key).address;
-const gasPrice = await web3.eth.getGasPrice()
-const gasAmount = await contract.methods.transfer(recipient,web3.utils.toWei(amount, 'ether')).estimateGas({ from: reci });
-    const accounts = await web3.eth.getAccounts();
-    let value = web3.utils.toWei(amount, 'ether')
-    console.log("private_key: ", private_key);
-    contract.methods.transfer(recipient, value).send({from: accounts[0],gasPrice:gasPrice,gas:gasAmount}).then(
-        (data) => {
-            res.status(200).json(data.transactionHash)
-        }
-    )
-     } catch (e) {
-        res.status(400).json({error: e});
-        console.log(e)
-    }
-})
 app.post('/depositmatic', async(req, res) => {
     try {
     var {Admin_address, private_key,recipient } = req.body;
@@ -259,7 +237,6 @@ const token = '0xe9e7cea3dedca5984780bafc599bd69add087d56'
 const provider = new HDWalletProvider(private_key,bsc);
 const web3 = new Web3(provider);
 const w = new Web3(bsc);
-console.log("admin_pk_address: ", Admin_address);
 const Admin_address = await w.eth.accounts.privateKeyToAccount(admin_pk).address;
 let contract = new web3.eth.Contract(minABI,token);
 const con = new w.eth.Contract(balanceOfABI, tokenContract)
